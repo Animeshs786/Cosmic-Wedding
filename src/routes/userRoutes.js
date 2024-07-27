@@ -11,7 +11,6 @@ const {
   updateProfile,
 } = require("../controllers/userController/authController/updateProfile");
 const { protect } = require("../middleware/protect");
-// const { authorizeRole } = require("../middleware/authorizerole");
 const {
   createAdmin,
 } = require("../controllers/userController/admin/createAdmin");
@@ -89,6 +88,7 @@ const {
 const {
   getUserDashboard,
 } = require("../controllers/dashboard/user/getUserDashboard");
+const authorizeRole = require("../middleware/authorizerole");
 
 const router = express.Router();
 
@@ -100,154 +100,154 @@ router.post(
 );
 router.post("/login", login);
 
-// router.patch(
-//   "/updatePassword",
-//   protect,
-//   authorizeRole("Super Admin", "Admin", "Vendor"),
-//   updatePassword
-// );
-// router.patch(
-//   "/updateProfile",
-//   protect,
-//   authorizeRole("Super Admin", "Admin", "Vendor"),
-//   fileUploader([{ name: "profileImage", maxCount: 1 }], "user"),
-//   updateProfile
-// );
+router.patch(
+  "/updatePassword",
+  protect,
+  authorizeRole("Super Admin", "Admin", "Vendor"),
+  updatePassword
+);
+router.patch(
+  "/updateProfile",
+  protect,
+  authorizeRole("Super Admin", "Admin", "Vendor"),
+  fileUploader([{ name: "profileImage", maxCount: 1 }], "user"),
+  updateProfile
+);
 
-// //Admin
-// router
-//   .route("/admin")
-//   .post(
-//     protect,
-//     authorizeRole("Super Admin"),
-//     fileUploader([{ name: "profileImage", maxCount: 1 }], "user"),
-//     createAdmin
-//   )
-//   .get(protect, authorizeRole("Super Admin"), getAllAdmin);
+//Admin
+router
+  .route("/admin")
+  .post(
+    protect,
+    authorizeRole("Super Admin"),
+    fileUploader([{ name: "profileImage", maxCount: 1 }], "user"),
+    createAdmin
+  )
+  .get(protect, authorizeRole("Super Admin"), getAllAdmin);
 
-// router
-//   .route("/admin/:id")
-//   .get(protect, authorizeRole("Super Admin"), GetAdmin)
-//   .patch(
-//     fileUploader([{ name: "profileImage", maxCount: 1 }], "user"),
-//     updateAdmin
-//   )
-//   .delete(protect, authorizeRole("Super Admin"), deleteAdmin);
+router
+  .route("/admin/:id")
+  .get(protect, authorizeRole("Super Admin"), GetAdmin)
+  .patch(
+    fileUploader([{ name: "profileImage", maxCount: 1 }], "user"),
+    updateAdmin
+  )
+  .delete(protect, authorizeRole("Super Admin"), deleteAdmin);
 
-// //Vendor
-// router
-//   .route("/vendor")
-//   .post(
-//     protect,
-//     authorizeRole("Super Admin", "Admin"),
-//     fileUploader([{ name: "profileImage", maxCount: 1 }], "user"),
-//     createVenodr
-//   )
-//   .get(protect, authorizeRole("Super Admin", "Admin"), getAllVendors);
+//Vendor
+router
+  .route("/vendor")
+  .post(
+    protect,
+    authorizeRole("Super Admin", "Admin"),
+    fileUploader([{ name: "profileImage", maxCount: 1 }], "user"),
+    createVenodr
+  )
+  .get(protect, authorizeRole("Super Admin", "Admin"), getAllVendors);
 
-// router
-//   .route("/vendor/:id")
-//   .get(protect, authorizeRole("Super Admin", "Admin"), getVendor)
-//   .patch(
-//     protect,
-//     authorizeRole("Super Admin", "Admin"),
-//     fileUploader([{ name: "profileImage", maxCount: 1 }], "user"),
-//     updateVendor
-//   )
-//   .delete(protect, authorizeRole("Super Admin", "Admin"), deleteVendor);
+router
+  .route("/vendor/:id")
+  .get(protect, authorizeRole("Super Admin", "Admin"), getVendor)
+  .patch(
+    protect,
+    authorizeRole("Super Admin", "Admin"),
+    fileUploader([{ name: "profileImage", maxCount: 1 }], "user"),
+    updateVendor
+  )
+  .delete(protect, authorizeRole("Super Admin", "Admin"), deleteVendor);
 
-// router.get(
-//   "/assignVendorCustomer",
-//   protect,
-//   authorizeRole("Vendor"),
-//   getCustomersAssignedToVendor
-// );
+router.get(
+  "/assignVendorCustomer",
+  protect,
+  authorizeRole("Vendor"),
+  getCustomersAssignedToVendor
+);
 
-// //Budget range
-// router
-//   .route("/budgetRange")
-//   .post(protect, authorizeRole("Super Admin", "Admin"), createBudgetRange)
-//   .get(protect, authorizeRole("Super Admin", "Admin"), getAllBudgetRanges);
+//Budget range
+router
+  .route("/budgetRange")
+  .post(protect, authorizeRole("Super Admin", "Admin"), createBudgetRange)
+  .get(protect, authorizeRole("Super Admin", "Admin"), getAllBudgetRanges);
 
-// router
-//   .route("/budgetRange/:id")
-//   .get(protect, authorizeRole("Super Admin", "Admin"), getBudgetRange)
-//   .patch(protect, authorizeRole("Super Admin", "Admin"), updateBudgetRange)
-//   .delete(protect, authorizeRole("Super Admin", "Admin"), deleteBudgetRange);
+router
+  .route("/budgetRange/:id")
+  .get(protect, authorizeRole("Super Admin", "Admin"), getBudgetRange)
+  .patch(protect, authorizeRole("Super Admin", "Admin"), updateBudgetRange)
+  .delete(protect, authorizeRole("Super Admin", "Admin"), deleteBudgetRange);
 
-// //Service Category
-// router
-//   .route("/service")
-//   .post(protect, authorizeRole("Super Admin", "Admin"), createServiceCategory)
-//   .get(protect, authorizeRole("Super Admin", "Admin"), getAllServiceCategories);
+//Service Category
+router
+  .route("/service")
+  .post(protect, authorizeRole("Super Admin", "Admin"), createServiceCategory)
+  .get(protect, authorizeRole("Super Admin", "Admin"), getAllServiceCategories);
 
-// router
-//   .route("/service/:id")
-//   .get(protect, authorizeRole("Super Admin", "Admin"), getServiceCategory)
-//   .patch(protect, authorizeRole("Super Admin", "Admin"), updateServiceCategory)
-//   .delete(
-//     protect,
-//     authorizeRole("Super Admin", "Admin"),
-//     deleteServiceCategory
-//   );
+router
+  .route("/service/:id")
+  .get(protect, authorizeRole("Super Admin", "Admin"), getServiceCategory)
+  .patch(protect, authorizeRole("Super Admin", "Admin"), updateServiceCategory)
+  .delete(
+    protect,
+    authorizeRole("Super Admin", "Admin"),
+    deleteServiceCategory
+  );
 
-// //Package
-// router
-//   .route("/package")
-//   .post(protect, authorizeRole("Super Admin", "Admin"), createPackage)
-//   .get(protect, authorizeRole("Super Admin", "Admin"), getAllPackage);
+//Package
+router
+  .route("/package")
+  .post(protect, authorizeRole("Super Admin", "Admin"), createPackage)
+  .get(protect, authorizeRole("Super Admin", "Admin"), getAllPackage);
 
-// router
-//   .route("/package/:id")
-//   .get(protect, authorizeRole("Super Admin", "Admin"), getPackage)
-//   .patch(protect, authorizeRole("Super Admin", "Admin"), updatePackage)
-//   .delete(protect, authorizeRole("Super Admin", "Admin"), deletePackage);
+router
+  .route("/package/:id")
+  .get(protect, authorizeRole("Super Admin", "Admin"), getPackage)
+  .patch(protect, authorizeRole("Super Admin", "Admin"), updatePackage)
+  .delete(protect, authorizeRole("Super Admin", "Admin"), deletePackage);
 
-// //Customer
-// router
-//   .route("/customer")
-//   .post(createCustomer)
-//   .get(protect, authorizeRole("Super Admin", "Admin"), getAllCustomers);
+//Customer
+router
+  .route("/customer")
+  .post(createCustomer)
+  .get(protect, authorizeRole("Super Admin", "Admin"), getAllCustomers);
 
-// router
-//   .route("/customer/:id")
-//   .get(protect, authorizeRole("Super Admin", "Admin"), getCustomer)
-//   .patch(
-//     protect,
-//     authorizeRole("Super Admin", "Admin", "Vendor"),
-//     updateCustomer
-//   )
-//   .delete(protect, authorizeRole("Super Admin", "Admin"), deleteCustomer);
+router
+  .route("/customer/:id")
+  .get(protect, authorizeRole("Super Admin", "Admin"), getCustomer)
+  .patch(
+    protect,
+    authorizeRole("Super Admin", "Admin", "Vendor"),
+    updateCustomer
+  )
+  .delete(protect, authorizeRole("Super Admin", "Admin"), deleteCustomer);
 
-// //Assign
-// router.post(
-//   "/assign",
-//   protect,
-//   authorizeRole("Admin", "Super Admin"),
-//   assignVendorToCustomer
-// );
+//Assign
+router.post(
+  "/assign",
+  protect,
+  authorizeRole("Admin", "Super Admin"),
+  assignVendorToCustomer
+);
 
-// router.delete(
-//   "/assign/:id",
-//   protect,
-//   authorizeRole("Admin", "Super Admin"),
-//   removeVendorToCustomer
-// );
+router.delete(
+  "/assign/:id",
+  protect,
+  authorizeRole("Admin", "Super Admin"),
+  removeVendorToCustomer
+);
 
-// //dashboard
-// router.get(
-//   "/vendorDashboard",
-//   protect,
-//   authorizeRole("Vendor"),
-//   getVendorDashboard
-// );
+//dashboard
+router.get(
+  "/vendorDashboard",
+  protect,
+  authorizeRole("Vendor"),
+  getVendorDashboard
+);
 
-// //dashboard
-// router.get(
-//   "/userDashboard",
-//   protect,
-//   authorizeRole("Admin", "Super Admin"),
-//   getUserDashboard
-// );
+//dashboard
+router.get(
+  "/userDashboard",
+  protect,
+  authorizeRole("Admin", "Super Admin"),
+  getUserDashboard
+);
 
 module.exports = router;
