@@ -1,7 +1,7 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const morgan = require("morgan");
+// const morgan = require("morgan");
 
 const { appRoutes } = require("./routes/appRoutes");
 const AppError = require("./utils/AppError");
@@ -14,7 +14,7 @@ app.use(express.json());
 
 //cors middleware
 app.use(cors());
-app.use(morgan("dev"));
+// app.use(morgan("dev"));
 
 //cookie parser middleware
 app.use(cookieParser());
