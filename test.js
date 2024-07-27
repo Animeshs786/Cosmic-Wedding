@@ -1,104 +1,104 @@
-const express = require("express");
-const {
-  register,
-} = require("../controllers/userController/authController/register");
-const fileUploader = require("../middleware/fileUploader");
-const { login } = require("../controllers/userController/authController/login");
-const {
-  updatePassword,
-} = require("../controllers/userController/authController/updatePassword");
-const {
-  updateProfile,
-} = require("../controllers/userController/authController/updateProfile");
-const { protect } = require("../middleware/protect");
+// const express = require("express");
+// const {
+//   register,
+// } = require("../controllers/userController/authController/register");
+// const fileUploader = require("../middleware/fileUploader");
+// const { login } = require("../controllers/userController/authController/login");
+// const {
+//   updatePassword,
+// } = require("../controllers/userController/authController/updatePassword");
+// const {
+//   updateProfile,
+// } = require("../controllers/userController/authController/updateProfile");
+// const { protect } = require("../middleware/protect");
 // const { authorizeRole } = require("../middleware/authorizerole");
-const {
-  createAdmin,
-} = require("../controllers/userController/admin/createAdmin");
-const {
-  getAllAdmin,
-} = require("../controllers/userController/admin/getAllAdmin");
-const { GetAdmin } = require("../controllers/userController/admin/getAdmin");
-const {
-  updateAdmin,
-} = require("../controllers/userController/admin/updateAdmin");
-const {
-  deleteAdmin,
-} = require("../controllers/userController/admin/deleteAdmin");
-const {
-  createVenodr,
-} = require("../controllers/userController/vendor/createVendor");
-const {
-  getAllVendors,
-} = require("../controllers/userController/vendor/getAllVenodr");
-const { getVendor } = require("../controllers/userController/vendor/getVendor");
-const {
-  updateVendor,
-} = require("../controllers/userController/vendor/updateVendor");
-const {
-  deleteVendor,
-} = require("../controllers/userController/vendor/deleteVendor");
-const {
-  createBudgetRange,
-} = require("../controllers/budgetRange/createBudgetRange");
-const {
-  getAllBudgetRanges,
-} = require("../controllers/budgetRange/getAllBudgetRange");
-const { getBudgetRange } = require("../controllers/budgetRange/getBudgetRange");
-const {
-  updateBudgetRange,
-} = require("../controllers/budgetRange/updateBudgetRange");
-const {
-  deleteBudgetRange,
-} = require("../controllers/budgetRange/deleteBudgetRange");
-const {
-  createServiceCategory,
-} = require("../controllers/service/createService");
-const {
-  getAllServiceCategories,
-} = require("../controllers/service/getAllService");
-const { getServiceCategory } = require("../controllers/service/getService");
-const {
-  updateServiceCategory,
-} = require("../controllers/service/updateService");
-const {
-  deleteServiceCategory,
-} = require("../controllers/service/deleteService");
-const { createPackage } = require("../controllers/package/createPackage");
-const { getAllPackage } = require("../controllers/package/getAllPackage");
-const { getPackage } = require("../controllers/package/getPackage");
-const { updatePackage } = require("../controllers/package/updatePackage");
-const { deletePackage } = require("../controllers/package/deletePackage");
-const { createCustomer } = require("../controllers/customer/createCustomer");
-const { getAllCustomers } = require("../controllers/customer/getAllCustomer");
-const { getCustomer } = require("../controllers/customer/getCustomer");
-const { updateCustomer } = require("../controllers/customer/updateCustomer");
-const { deleteCustomer } = require("../controllers/customer/deleteCustomer");
-const {
-  assignVendorToCustomer,
-} = require("../controllers/assign/assignVendorToCustomer");
-const {
-  removeVendorToCustomer,
-} = require("../controllers/assign/removeVendorToCustomer");
-const {
-  getCustomersAssignedToVendor,
-} = require("../controllers/userController/vendor/getCustomerAssignToVendor");
-const {
-  getVendorDashboard,
-} = require("../controllers/dashboard/vendor/getVendorDashboard");
-const {
-  getUserDashboard,
-} = require("../controllers/dashboard/user/getUserDashboard");
+// const {
+//   createAdmin,
+// } = require("../controllers/userController/admin/createAdmin");
+// const {
+//   getAllAdmin,
+// } = require("../controllers/userController/admin/getAllAdmin");
+// const { GetAdmin } = require("../controllers/userController/admin/getAdmin");
+// const {
+//   updateAdmin,
+// } = require("../controllers/userController/admin/updateAdmin");
+// const {
+//   deleteAdmin,
+// } = require("../controllers/userController/admin/deleteAdmin");
+// const {
+//   createVenodr,
+// } = require("../controllers/userController/vendor/createVendor");
+// const {
+//   getAllVendors,
+// } = require("../controllers/userController/vendor/getAllVenodr");
+// const { getVendor } = require("../controllers/userController/vendor/getVendor");
+// const {
+//   updateVendor,
+// } = require("../controllers/userController/vendor/updateVendor");
+// const {
+//   deleteVendor,
+// } = require("../controllers/userController/vendor/deleteVendor");
+// const {
+//   createBudgetRange,
+// } = require("../controllers/budgetRange/createBudgetRange");
+// const {
+//   getAllBudgetRanges,
+// } = require("../controllers/budgetRange/getAllBudgetRange");
+// const { getBudgetRange } = require("../controllers/budgetRange/getBudgetRange");
+// const {
+//   updateBudgetRange,
+// } = require("../controllers/budgetRange/updateBudgetRange");
+// const {
+//   deleteBudgetRange,
+// } = require("../controllers/budgetRange/deleteBudgetRange");
+// const {
+//   createServiceCategory,
+// } = require("../controllers/service/createService");
+// const {
+//   getAllServiceCategories,
+// } = require("../controllers/service/getAllService");
+// const { getServiceCategory } = require("../controllers/service/getService");
+// const {
+//   updateServiceCategory,
+// } = require("../controllers/service/updateService");
+// const {
+//   deleteServiceCategory,
+// } = require("../controllers/service/deleteService");
+// const { createPackage } = require("../controllers/package/createPackage");
+// const { getAllPackage } = require("../controllers/package/getAllPackage");
+// const { getPackage } = require("../controllers/package/getPackage");
+// const { updatePackage } = require("../controllers/package/updatePackage");
+// const { deletePackage } = require("../controllers/package/deletePackage");
+// const { createCustomer } = require("../controllers/customer/createCustomer");
+// const { getAllCustomers } = require("../controllers/customer/getAllCustomer");
+// const { getCustomer } = require("../controllers/customer/getCustomer");
+// const { updateCustomer } = require("../controllers/customer/updateCustomer");
+// const { deleteCustomer } = require("../controllers/customer/deleteCustomer");
+// const {
+//   assignVendorToCustomer,
+// } = require("../controllers/assign/assignVendorToCustomer");
+// const {
+//   removeVendorToCustomer,
+// } = require("../controllers/assign/removeVendorToCustomer");
+// const {
+//   getCustomersAssignedToVendor,
+// } = require("../controllers/userController/vendor/getCustomerAssignToVendor");
+// const {
+//   getVendorDashboard,
+// } = require("../controllers/dashboard/vendor/getVendorDashboard");
+// const {
+//   getUserDashboard,
+// } = require("../controllers/dashboard/user/getUserDashboard");
 
-const router = express.Router();
+// const router = express.Router();
 
-//Authentication
-router.post(
-  "/register",
-  fileUploader([{ name: "profileImage", maxCount: 1 }], "user"),
-  register
-);
-router.post("/login", login);
+// //Authentication
+// router.post(
+//   "/register",
+//   fileUploader([{ name: "profileImage", maxCount: 1 }], "user"),
+//   register
+// );
+// router.post("/login", login);
 
 // router.patch(
 //   "/updatePassword",
@@ -250,4 +250,4 @@ router.post("/login", login);
 //   getUserDashboard
 // );
 
-module.exports = router;
+// module.exports = router;
