@@ -37,3 +37,12 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = user;
   next();
 });
+
+exports.authorizedRole = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(new AppError("You don't have permission to access.", 400));
+    }
+    next();
+  };
+};
