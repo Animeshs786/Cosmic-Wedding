@@ -39,7 +39,7 @@ const customerSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ["Pending", "Accept", "Reject"],
-    default: "pending",
+    default: "Pending",
   },
   createdAt: {
     type: Date,
