@@ -167,7 +167,7 @@ router.get(
 router
   .route("/budgetRange")
   .post(protect, authorizedRole("Super Admin", "Admin"), createBudgetRange)
-  .get(protect, authorizedRole("Super Admin", "Admin"), getAllBudgetRanges);
+  .get(getAllBudgetRanges);
 
 router
   .route("/budgetRange/:id")
@@ -179,7 +179,11 @@ router
 router
   .route("/service")
   .post(protect, authorizedRole("Super Admin", "Admin"), createServiceCategory)
-  .get(protect, authorizedRole("Super Admin", "Admin"), getAllServiceCategories);
+  .get(
+    protect,
+    authorizedRole("Super Admin", "Admin"),
+    getAllServiceCategories
+  );
 
 router
   .route("/service/:id")
