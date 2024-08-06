@@ -19,6 +19,9 @@ const userSchema = new mongoose.Schema(
       select: false,
       required: [true, "Password must be required."],
     },
+    verify:{
+      type:Boolean,default:false
+    },
     role: {
       type: String,
       enum: ["Super Admin", "Admin", "Vendor"],
@@ -27,6 +30,11 @@ const userSchema = new mongoose.Schema(
     package: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Package",
+    },
+    packageExpiry: Date,
+    assignCustomerNumber: {
+      type: Number,
+      default: 0,
     },
     service: {
       type: mongoose.Schema.Types.ObjectId,
@@ -49,6 +57,10 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: Date.now(),
     },
+    lastAssignedAt: {
+      type: Date,
+      default: new Date(0), // Initialize to the epoch
+    },
   },
   {
     toJSON: { virtuals: true },
@@ -63,12 +75,12 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-//instence method for comparing the password
+// instance method for comparing the password
 userSchema.methods.comparePassword = async function (currentPassword) {
   return await bcrypt.compare(currentPassword, this.password);
 };
 
-//validate jwt token create time
+// validate jwt token create time
 userSchema.methods.validatePasswordUpdate = async function (tokenTimestamp) {
   if (this.passwordUpdatedAt) {
     const updateTimestamp = parseInt(
@@ -103,7 +115,7 @@ userSchema.pre(/^find/, function (next) {
     })
     .populate({
       path: "package",
-      select: "name",
+      select: "name validity assignLeadValue",
     });
   next();
 });

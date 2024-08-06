@@ -6,6 +6,19 @@ const packageScheam = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  validity: {
+    type: Number,
+    enum: [1, 3, 6, 12],
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  assignLeadValue: {
+    type: Number,
+    required: true, //it define lead value for package
+  },
   createdAt: {
     type: Date,
     default: Date.now,

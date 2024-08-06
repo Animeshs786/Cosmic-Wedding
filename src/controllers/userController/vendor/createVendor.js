@@ -13,7 +13,7 @@ exports.createVenodr = catchAsync(async (req, res, next) => {
   obj.mobile = req.body.mobile;
   obj.location = req.body.location;
   obj.service = req.body.service;
-  obj.package = req.body.package;
+  // obj.package = req.body.package;
   obj.budgetRange = req.body.budgetRange;
 
   let profileImagePath;

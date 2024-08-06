@@ -4,7 +4,7 @@ const deleteOldFiles = require("../../../utils/deleteOldFiles");
 const User = require("../../../models/user");
 
 exports.updateVendor = catchAsync(async (req, res, next) => {
-  const { userName, email, mobile, password,location, service,package:packageData,budgetRange } = req.body;
+  const { userName, email, mobile, password,location, service,budgetRange,verify } = req.body;
   const superAdmin = await User.findById(req.params.id);
 
   if (!superAdmin) {
@@ -36,7 +36,8 @@ exports.updateVendor = catchAsync(async (req, res, next) => {
   if (mobile) superAdmin.mobile = mobile;
   if (location) superAdmin.location = location;
   if (service) superAdmin.service = service;
-  if (packageData) superAdmin.package = packageData;
+  if (verify) superAdmin.verify = verify;
+  // if (packageData) superAdmin.package = packageData;
   if (budgetRange) superAdmin.budgetRange = budgetRange;
   if (password) {
     superAdmin.password = password;

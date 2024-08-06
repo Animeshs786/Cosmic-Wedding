@@ -88,6 +88,8 @@ const {
 const {
   getUserDashboard,
 } = require("../controllers/dashboard/user/getUserDashboard");
+const testVendro = require("../controllers/assign/testVendor");
+const assignPackageToVendor = require("../controllers/userController/vendor/assignPackageToVendor");
 // const authorizedRole = require("../middleware/authorizedrole");
 
 const router = express.Router();
@@ -138,8 +140,8 @@ router
 router
   .route("/vendor")
   .post(
-    protect,
-    authorizedRole("Super Admin", "Admin"),
+    // protect,
+    // authorizedRole("Super Admin", "Admin"),
     fileUploader([{ name: "profileImage", maxCount: 1 }], "user"),
     createVenodr
   )
@@ -253,5 +255,8 @@ router.get(
   authorizedRole("Admin", "Super Admin"),
   getUserDashboard
 );
+
+router.get("/testAssignVendor",testVendro);
+router.post("/assignPackage",protect, authorizedRole("Super Admin", "Admin"),assignPackageToVendor)
 
 module.exports = router;

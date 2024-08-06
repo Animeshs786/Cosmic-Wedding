@@ -1,11 +1,13 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-// const morgan = require("morgan");
+const morgan = require("morgan");
+const cron = require("node-cron");
 
 const { appRoutes } = require("./routes/appRoutes");
 const AppError = require("./utils/AppError");
 const globalErrorHandler = require("./controllers/errorController");
+const assignVendor = require("./controllers/assign/assignVendor");
 
 const app = express();
 
@@ -14,7 +16,17 @@ app.use(express.json());
 
 //cors middleware
 app.use(cors());
-// app.use(morgan("dev"));
+app.use(morgan("dev"));
+
+// Schedule the cron job to run the testVendro function every minute
+cron.schedule("* * * * *", async () => {
+  try {
+    await assignVendor();
+    console.log("assign function executed");
+  } catch (error) {
+    console.error("Error executing assign function:", error);
+  }
+});
 
 //cookie parser middleware
 app.use(cookieParser());
