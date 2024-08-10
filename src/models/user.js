@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       select: false,
-      required: [true, "Password must be required."],
+      // required: [true, "Password must be required."],
     },
     verify:{
       type:Boolean,default:false
@@ -40,10 +40,10 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Service",
     },
-    budgetRange: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "BudgetRange",
-    },
+    // budgetRange: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "BudgetRange",
+    // },
     location: String,
     mobile: {
       type: String,
@@ -109,10 +109,10 @@ userSchema.pre(/^find/, function (next) {
     path: "service",
     select: "name",
   })
-    .populate({
-      path: "budgetRange",
-      select: "name",
-    })
+    // .populate({
+    //   path: "budgetRange",
+    //   select: "name",
+    // })
     .populate({
       path: "package",
       select: "name validity assignLeadValue",

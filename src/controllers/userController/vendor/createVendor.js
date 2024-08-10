@@ -6,15 +6,15 @@ const deleteOldFiles = require("../../../utils/deleteOldFiles");
 exports.createVenodr = catchAsync(async (req, res, next) => {
   const obj = {};
   obj.userName = req.body.userName;
-  obj.password = req.body.password;
+  // obj.password = req.body.password;
   obj.email = req.body.email;
-  obj.confirmPassword = req.body.confirmPassword;
+  // obj.confirmPassword = req.body.confirmPassword;
   obj.role = "Vendor";
   obj.mobile = req.body.mobile;
   obj.location = req.body.location;
   obj.service = req.body.service;
   // obj.package = req.body.package;
-  obj.budgetRange = req.body.budgetRange;
+  // obj.budgetRange = req.body.budgetRange;
 
   let profileImagePath;
 
