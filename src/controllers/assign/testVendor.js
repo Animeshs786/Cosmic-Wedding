@@ -14,31 +14,32 @@ async function testVendro(req, res) {
       const vendors = await User.find({
         location: customer.location,
         role: "Vendor",
-        packageExpiry: { $gt: new Date() },
-      }).sort("lastAssignedAt");
+        verify: true, // Added verification condition
+        packageExpiry: { $gt: new Date() }, // Package expiry check
+      }).sort("lastAssignedAt"); // Sort vendors by last assigned time
 
       for (const vendor of vendors) {
-        if (vendor.assignCustomerNumber < vendor.package.assignLeadValue) {
+        if (vendor.assignCustomerNumber < vendor.package.assignLeadValue) { // Check vendor's lead capacity
           assignments.push({
             customer: customer._id,
             vendor: vendor._id,
           });
 
-          vendor.lastAssignedAt = new Date();
-          vendor.assignCustomerNumber += 1;
-          await vendor.save();
+          vendor.lastAssignedAt = new Date(); // Update last assigned time
+          vendor.assignCustomerNumber += 1; // Increment assigned customer number
+          await vendor.save(); // Save vendor data
 
           console.log(
             `Assigned customer ${customer.name} to vendor ${vendor.userName}`
           );
 
-          break;
+          break; // Break loop once a vendor is assigned
         }
       }
     }
 
     if (assignments.length > 0) {
-      await Assign.insertMany(assignments);
+      await Assign.insertMany(assignments); // Insert assignments in bulk
       res.status(200).json({
         message: `Assigned ${assignments.length} customers to vendors.`,
       });
