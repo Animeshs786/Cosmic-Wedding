@@ -3,7 +3,7 @@ const AppError = require("../../utils/AppError");
 const catchAsync = require("../../utils/catchAsync");
 
 exports.getPackage = catchAsync(async (req, res, next) => {
-  const packageData = await Package.findById(req.params.id);
+  const packageData = await Package.findById(req.params.id).populate('budgetRange','name');
   if (!packageData) {
     return next(new AppError("Package not found.", 404));
   }

@@ -4,16 +4,16 @@ const packageScheam = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
+   
   },
   validity: {
     type: Number,
     enum: [1, 3, 6, 12],
     required: true,
   },
-  price: {
-    type: Number,
-    required: true,
+  budgetRange: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "BudgetRange",
   },
   assignLeadValue: {
     type: Number,

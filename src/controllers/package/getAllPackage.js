@@ -15,7 +15,7 @@ exports.getAllPackage = catchAsync(async (req, res) => {
     Package
   );
 
-  const packageData = await Package.find(obj).skip(skip).limit(limit);
+  const packageData = await Package.find(obj).populate('budgetRange','name').skip(skip).limit(limit);
 
   res.status(200).json({
     status: true,
