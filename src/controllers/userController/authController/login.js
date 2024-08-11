@@ -13,6 +13,11 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!user || !(await user.comparePassword(password)))
     return next(new AppError("Invalid email or password.", 404));
 
+  // Check if the user is a vendor and their status is "Unverified"
+  if (user.role === "Vendor" && user.verify === "Unverified") {
+    return next(new AppError("You don't have permission to log in.", 401));
+  }
+
   user.password = undefined;
   createToken(user, 200, res);
 });
