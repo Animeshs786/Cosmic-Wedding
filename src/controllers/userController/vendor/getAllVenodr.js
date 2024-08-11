@@ -33,7 +33,8 @@ exports.getAllVendors = catchAsync(async (req, res) => {
     page,
     currentLimit,
     User,
-    "Vendor"
+    "Vendor",
+    obj
   );
 
   const vendors = await User.find(obj)
@@ -45,7 +46,7 @@ exports.getAllVendors = catchAsync(async (req, res) => {
     status: true,
     results: vendors.length,
     totalResult,
-    toatalPage,
+    totalPage:toatalPage,
     data: {
       vendors,
     },

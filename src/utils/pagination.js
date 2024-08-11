@@ -2,7 +2,8 @@ const pagination = async (
   CurrentPage = 1,
   currentLimit = 10,
   Model,
-  role = null
+  role = null,
+  filter={},
 ) => {
   const page = Number(CurrentPage);
   const limit = Number(currentLimit);
@@ -12,11 +13,11 @@ const pagination = async (
   if (role) {
     totalResult = await Model.countDocuments({ role });
   } else {
-    totalResult = await Model.countDocuments();
+    totalResult = await Model.countDocuments(filter);
   }
 
   const toatalPage = Math.ceil(totalResult / limit);
-  return { limit, skip, totalResult, toatalPage };
+   return { limit, skip, totalResult, toatalPage };
 };
 
 module.exports = pagination;

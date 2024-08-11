@@ -12,6 +12,7 @@ exports.updateCustomer = catchAsync(async (req, res, next) => {
     budgetRange,
     guest,
     services,
+    status
   } = req.body;
 
   const updateObj = {};
@@ -24,6 +25,7 @@ exports.updateCustomer = catchAsync(async (req, res, next) => {
   if (budgetRange) updateObj.budgetRange = budgetRange;
   if (guest) updateObj.guest = guest;
   if (services) updateObj.services = services;
+  if (status) updateObj.status = status;
 
   const customer = await Customer.findByIdAndUpdate(req.params.id, updateObj, {
     new: true,

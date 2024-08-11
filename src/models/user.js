@@ -20,7 +20,9 @@ const userSchema = new mongoose.Schema(
       // required: [true, "Password must be required."],
     },
     verify:{
-      type:Boolean,default:false
+      type:String,
+      enum:["Verified","Unverified","Pending"],
+      default:"Pending"
     },
     role: {
       type: String,
@@ -115,7 +117,7 @@ userSchema.pre(/^find/, function (next) {
     // })
     .populate({
       path: "package",
-      select: "name validity assignLeadValue",
+      select: "name validity assignLeadValue budgetRange",
     });
   next();
 });
