@@ -15,7 +15,8 @@ exports.getAllAdmin = catchAsync(async (req, res) => {
     page,
     currentLimit,
     User,
-    "Admin"
+    "Admin",
+    obj
   );
 
   const admins = await User.find(obj)

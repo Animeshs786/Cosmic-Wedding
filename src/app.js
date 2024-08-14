@@ -19,14 +19,14 @@ app.use(cors());
 app.use(morgan("dev"));
 
 // Schedule the cron job to run the testVendro function every minute
-cron.schedule("* * * * *", async () => {
-  try {
-    await assignVendor();
-    console.log("assign function executed");
-  } catch (error) {
-    console.error("Error executing assign function:", error);
-  }
-});
+// cron.schedule("* * * * *", async () => {
+//   try {
+//     await assignVendor();
+//     console.log("assign function executed");
+//   } catch (error) {
+//     console.error("Error executing assign function:", error);
+//   }
+// });
 
 //cookie parser middleware
 app.use(cookieParser());

@@ -4,11 +4,10 @@ const packageScheam = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-   
   },
   validity: {
     type: Number,
-    enum: [1, 3, 6, 12],
+    enum: [1, 10, 15, 30, 90, 180, 360],
     required: true,
   },
   budgetRange: {

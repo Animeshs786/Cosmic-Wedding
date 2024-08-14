@@ -8,6 +8,11 @@ exports.assignVendorToCustomer = catchAsync(async (req, res, next) => {
   if (!customer || !vendor) {
     return next(new AppError("Customer and vendor are required fields.", 400));
   }
+  const existingAssign = await Assign.findOne({ customer });
+
+  if (existingAssign) {
+    return next(new AppError("Customer already assigned to a vendor.", 400));
+  }
 
   const assign = await Assign.create({ customer, vendor });
 

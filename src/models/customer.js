@@ -13,6 +13,10 @@ const customerSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  weedingLocation: {
+    type: String,
+    required: true,
+  },
   eventDate: {
     type: Date,
     required: true,

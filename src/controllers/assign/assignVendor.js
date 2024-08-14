@@ -53,7 +53,6 @@
 
 // module.exports = assignVendor;
 
-
 const Assign = require("../../models/assign");
 const Customer = require("../../models/customer");
 const User = require("../../models/user");
@@ -63,21 +62,23 @@ async function assignVendor() {
     // Find unassigned customers and populate their budget range
     const unassignedCustomers = await Customer.find({
       _id: { $nin: await Assign.distinct("customer") },
-    }).populate('budgetRange');
+    }).populate("budgetRange");
 
     const assignments = [];
 
     for (const customer of unassignedCustomers) {
       // Find vendors that match the customer's location and have not reached their lead limit
       const vendors = await User.find({
-        location: customer.location,
+        location: customer.weedingLocation,
         role: "Vendor",
         verify: "Verified", // Only verified vendors
-        packageExpiry: { $gt: new Date() }, // Check if the vendor's package has not expired
-      }).populate({
-        path: 'package',
-        populate: { path: 'budgetRange' } // Populate vendor's package and budget range
-      }).sort("lastAssignedAt"); // Sort vendors by last assigned time
+       // packageExpiry: { $gt: new Date() }, // Check if the vendor's package has not expired
+      })
+        .populate({
+          path: "package",
+          populate: { path: "budgetRange" }, // Populate vendor's package and budget range
+        })
+        .sort("lastAssignedAt"); // Sort vendors by last assigned time
 
       for (const vendor of vendors) {
         // Check if vendor's package budget range matches the customer's budget range

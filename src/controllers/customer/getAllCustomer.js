@@ -1,26 +1,35 @@
 // const Customer = require("../../models/customer");
-// const Assign = require("../../models/assign"); // Import the Assign model
+// const Assign = require("../../models/assign");
 // const catchAsync = require("../../utils/catchAsync");
 // const pagination = require("../../utils/pagination");
 
 // exports.getAllCustomers = catchAsync(async (req, res) => {
-//   const { page, limit: currentLimit, search, eventDate ,location,} = req.query;
+//   const {
+//     page,
+//     limit: currentLimit,
+//     search,
+//     startDate,
+//     endDate,
+//     location,
+//   } = req.query;
 //   const obj = {};
+
 //   if (search) {
 //     obj.name = { $regex: search, $options: "i" };
 //   }
 //   if (location) {
 //     obj.location = location;
 //   }
-//   if (eventDate) {
-//     obj.eventDate = eventDate;
+//   if (startDate && endDate) {
+//     obj.eventDate = { $gte: new Date(startDate), $lte: new Date(endDate) };
 //   }
 
-//   const { limit, skip, totalResult, toatalPage:totalPage } = await pagination(
-//     page,
-//     currentLimit,
-//     Customer
-//   );
+//   const {
+//     limit,
+//     skip,
+//     totalResult,
+//     toatalPage: totalPage,
+//   } = await pagination(page, currentLimit, Customer, null, obj);
 
 //   const customers = await Customer.find(obj)
 //     .populate("budgetRange")
@@ -30,11 +39,15 @@
 
 //   // Fetch assigned vendors for each customer
 //   const customerIds = customers.map((customer) => customer._id);
-//   const assignments = await Assign.find({ customer: { $in: customerIds } }).populate("vendor",'userName');
+//   const assignments = await Assign.find({
+//     customer: { $in: customerIds },
+//   }).populate("vendor", "userName");
 
 //   // Map assignments to customers
 //   const customersWithVendors = customers.map((customer) => {
-//     const assignment = assignments.find((assign) => String(assign.customer) === String(customer._id));
+//     const assignment = assignments.find(
+//       (assign) => String(assign.customer) === String(customer._id)
+//     );
 //     return {
 //       ...customer._doc,
 //       vendor: assignment ? assignment.vendor : null,
@@ -57,20 +70,38 @@ const catchAsync = require("../../utils/catchAsync");
 const pagination = require("../../utils/pagination");
 
 exports.getAllCustomers = catchAsync(async (req, res) => {
-  const { page, limit: currentLimit, search, startDate, endDate, location } = req.query;
+  const {
+    page,
+    limit: currentLimit,
+    search,
+    startDate,
+    endDate,
+    budgetRange,
+  } = req.query;
+
   const obj = {};
 
   if (search) {
-    obj.name = { $regex: search, $options: "i" };
+    obj.$or = [
+      { name: { $regex: search, $options: "i" } },
+      { location: { $regex: search, $options: "i" } },
+    ];
   }
-  if (location) {
-    obj.location = location;
-  }
+
   if (startDate && endDate) {
     obj.eventDate = { $gte: new Date(startDate), $lte: new Date(endDate) };
   }
 
-  const { limit, skip, totalResult, toatalPage:totalPage } = await pagination(page, currentLimit, Customer,null,obj);
+  if (budgetRange) {
+    obj.budgetRange = budgetRange;
+  }
+
+  const {
+    limit,
+    skip,
+    totalResult,
+    toatalPage: totalPage,
+  } = await pagination(page, currentLimit, Customer, null, obj);
 
   const customers = await Customer.find(obj)
     .populate("budgetRange")
@@ -78,13 +109,15 @@ exports.getAllCustomers = catchAsync(async (req, res) => {
     .skip(skip)
     .limit(limit);
 
-  // Fetch assigned vendors for each customer
   const customerIds = customers.map((customer) => customer._id);
-  const assignments = await Assign.find({ customer: { $in: customerIds } }).populate("vendor", "userName");
+  const assignments = await Assign.find({
+    customer: { $in: customerIds },
+  }).populate("vendor", "userName");
 
-  // Map assignments to customers
   const customersWithVendors = customers.map((customer) => {
-    const assignment = assignments.find((assign) => String(assign.customer) === String(customer._id));
+    const assignment = assignments.find(
+      (assign) => String(assign.customer) === String(customer._id)
+    );
     return {
       ...customer._doc,
       vendor: assignment ? assignment.vendor : null,
@@ -100,4 +133,3 @@ exports.getAllCustomers = catchAsync(async (req, res) => {
     data: { customers: customersWithVendors },
   });
 });
-

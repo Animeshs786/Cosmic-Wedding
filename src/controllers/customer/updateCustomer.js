@@ -12,7 +12,8 @@ exports.updateCustomer = catchAsync(async (req, res, next) => {
     budgetRange,
     guest,
     services,
-    status
+    status,
+    weedingLocation,
   } = req.body;
 
   const updateObj = {};
