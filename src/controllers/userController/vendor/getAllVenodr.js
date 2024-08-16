@@ -18,7 +18,7 @@ exports.getAllVendors = catchAsync(async (req, res) => {
 
   if (search) {
     obj.$or = [
-      { name: { $regex: search, $options: "i" } },
+      { userName: { $regex: search, $options: "i" } },
       { location: { $regex: search, $options: "i" } },
     ];
   }
