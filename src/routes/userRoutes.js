@@ -90,6 +90,11 @@ const {
 } = require("../controllers/dashboard/user/getUserDashboard");
 const testVendro = require("../controllers/assign/testVendor");
 const assignPackageToVendor = require("../controllers/userController/vendor/assignPackageToVendor");
+const { createLocation } = require("../controllers/location/createLocation");
+const { getAllLocation } = require("../controllers/location/getAllLocation");
+const { getLocation } = require("../controllers/location/getLocation");
+const { updateLocation } = require("../controllers/location/updateLocation");
+const { deleteLocation } = require("../controllers/location/deleteLocation");
 // const authorizedRole = require("../middleware/authorizedrole");
 
 const router = express.Router();
@@ -256,7 +261,24 @@ router.get(
   getUserDashboard
 );
 
-router.get("/testAssignVendor",testVendro);
-router.post("/assignPackage",protect, authorizedRole("Super Admin", "Admin"),assignPackageToVendor)
+router.get("/testAssignVendor", testVendro);
+router.post(
+  "/assignPackage",
+  protect,
+  authorizedRole("Super Admin", "Admin"),
+  assignPackageToVendor
+);
+
+//Location
+router
+  .route("/location")
+  .post(protect, authorizedRole("Super Admin", "Admin"), createLocation)
+  .get(getAllLocation);
+
+router
+  .route("/location/:id")
+  .get(protect, authorizedRole("Super Admin", "Admin"), getLocation)
+  .patch(protect, authorizedRole("Super Admin", "Admin"), updateLocation)
+  .delete(protect, authorizedRole("Super Admin", "Admin"), deleteLocation);
 
 module.exports = router;
