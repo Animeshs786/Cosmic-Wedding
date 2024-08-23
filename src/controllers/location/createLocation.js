@@ -14,14 +14,15 @@ exports.createLocation = catchAsync(async (req, res, next) => {
     return next(new AppError("Location already exists", 400));
   }
 
-  locationData.location = location;
-  await locationData.save();
+  const newLocation = await Location.create({
+    location,
+  });
 
   res.status(201).json({
     status: true,
     message: "Location created successfully",
     data: {
-      location: locationData,
+      location: newLocation,
     },
   });
 });
