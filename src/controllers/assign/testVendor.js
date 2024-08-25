@@ -1,7 +1,6 @@
 const Assign = require("../../models/assign");
 const Customer = require("../../models/customer");
 const User = require("../../models/user");
-const Package = require("../../models/package");
 
 async function testVendro(req, res) {
   try {
@@ -13,7 +12,7 @@ async function testVendro(req, res) {
 
     for (const customer of unassignedCustomers) {
       const vendors = await User.find({
-        location: customer.weedingLocation,
+        location: { $in: [customer.weedingLocation] },
         role: "Vendor",
         verify: "Verified", // Verification condition
         //packageExpiry: { $gt: new Date() }, // Package expiry check

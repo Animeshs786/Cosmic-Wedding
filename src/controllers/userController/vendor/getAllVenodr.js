@@ -19,10 +19,11 @@ exports.getAllVendors = catchAsync(async (req, res) => {
   if (search) {
     obj.$or = [
       { userName: { $regex: search, $options: "i" } },
-      { location: { $regex: search, $options: "i" } },
+      // Search for the query in any of the locations
+      { location: { $in: [new RegExp(search, "i")] } },
     ];
   }
-  
+
   if (service) {
     obj.service = service;
   }
@@ -50,7 +51,7 @@ exports.getAllVendors = catchAsync(async (req, res) => {
     status: true,
     results: vendors.length,
     totalResult,
-    totalPage:toatalPage,
+    totalPage: toatalPage,
     data: {
       vendors,
     },

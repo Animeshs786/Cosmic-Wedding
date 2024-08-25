@@ -45,13 +45,14 @@ exports.updateVendor = catchAsync(async (req, res, next) => {
   if (email) vendor.email = email;
   if (profileImage) vendor.profileImage = profileImage;
   if (mobile) vendor.mobile = mobile;
-  if (location) vendor.location = location;
+  if (location) vendor.location = JSON.parse(location);
   if (service) vendor.service = service;
   if (verify) vendor.verify = verify;
   if (password) {
     vendor.password = password;
     vendor.confirmPassword = password;
   }
+  
 
   // Assign package to vendor if packageId is provided
   if (packageId) {
@@ -63,7 +64,7 @@ exports.updateVendor = catchAsync(async (req, res, next) => {
     vendor.package = selectedPackage._id;
     vendor.packageExpiry = new Date(
       // Date.now() + selectedPackage.validity * 30 * 24 * 60 * 60 * 1000
-      Date.now() + selectedPackage.validity  * 24 * 60 * 60 * 1000
+      Date.now() + selectedPackage.validity * 24 * 60 * 60 * 1000
     );
     vendor.assignCustomerNumber = 0; // Reset assigned customer number
   }

@@ -11,7 +11,7 @@ exports.createVenodr = catchAsync(async (req, res, next) => {
   // obj.confirmPassword = req.body.confirmPassword;
   obj.role = "Vendor";
   obj.mobile = req.body.mobile;
-  obj.location = req.body.location;
+  obj.location = req.body.location ? JSON.parse(req.body.location) : [];
   obj.service = req.body.service;
   // obj.package = req.body.package;
   // obj.budgetRange = req.body.budgetRange;

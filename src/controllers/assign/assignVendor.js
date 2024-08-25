@@ -67,18 +67,17 @@ async function assignVendor() {
     const assignments = [];
 
     for (const customer of unassignedCustomers) {
-      // Find vendors that match the customer's location and have not reached their lead limit
       const vendors = await User.find({
-        location: customer.weedingLocation,
+        location: { $in: [customer.weedingLocation] }, 
         role: "Vendor",
-        verify: "Verified", // Only verified vendors
-       // packageExpiry: { $gt: new Date() }, // Check if the vendor's package has not expired
+        verify: "Verified",
+        // packageExpiry: { $gt: new Date() }, // Uncomment if you want to check for package expiry
       })
         .populate({
           path: "package",
-          populate: { path: "budgetRange" }, // Populate vendor's package and budget range
+          populate: { path: "budgetRange" },
         })
-        .sort("lastAssignedAt"); // Sort vendors by last assigned time
+        .sort("lastAssignedAt");
 
       for (const vendor of vendors) {
         // Check if vendor's package budget range matches the customer's budget range

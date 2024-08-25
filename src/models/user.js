@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema(
     //   type: mongoose.Schema.Types.ObjectId,
     //   ref: "BudgetRange",
     // },
-    location: String,
+    location: [String],
     mobile: {
       type: String,
       unique: true,
