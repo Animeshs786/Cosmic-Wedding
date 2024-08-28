@@ -95,6 +95,10 @@ const { getAllLocation } = require("../controllers/location/getAllLocation");
 const { getLocation } = require("../controllers/location/getLocation");
 const { updateLocation } = require("../controllers/location/updateLocation");
 const { deleteLocation } = require("../controllers/location/deleteLocation");
+const {
+  getAllRejectedLead,
+} = require("../controllers/rejectedLead/getAllRejectedLead");
+const { verifyRejectLead } = require("../controllers/rejectedLead/verifyRejectLead");
 // const authorizedRole = require("../middleware/authorizedrole");
 
 const router = express.Router();
@@ -280,5 +284,18 @@ router
   .get(protect, authorizedRole("Super Admin", "Admin"), getLocation)
   .patch(protect, authorizedRole("Super Admin", "Admin"), updateLocation)
   .delete(protect, authorizedRole("Super Admin", "Admin"), deleteLocation);
+
+//Reject Lead
+router
+  .route("/rejectLead")
+  .get(
+    protect,
+    authorizedRole("Super Admin", "Admin", "Vendor"),
+    getAllRejectedLead
+  );
+
+router
+  .route("/rejectLead/:id")
+  .patch(protect, authorizedRole("Super Admin", "Admin"), verifyRejectLead);
 
 module.exports = router;

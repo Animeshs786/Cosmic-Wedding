@@ -19,10 +19,10 @@ const userSchema = new mongoose.Schema(
       select: false,
       // required: [true, "Password must be required."],
     },
-    verify:{
-      type:String,
-      enum:["Verified","Unverified","Pending"],
-      default:"Pending"
+    verify: {
+      type: String,
+      enum: ["Verified", "Unverified", "Pending"],
+      default: "Pending",
     },
     role: {
       type: String,
@@ -46,7 +46,12 @@ const userSchema = new mongoose.Schema(
     //   type: mongoose.Schema.Types.ObjectId,
     //   ref: "BudgetRange",
     // },
-    location: [String],
+    location: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Location",
+      },
+    ],
     mobile: {
       type: String,
       unique: true,
