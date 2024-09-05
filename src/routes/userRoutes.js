@@ -98,7 +98,12 @@ const { deleteLocation } = require("../controllers/location/deleteLocation");
 const {
   getAllRejectedLead,
 } = require("../controllers/rejectedLead/getAllRejectedLead");
-const { verifyRejectLead } = require("../controllers/rejectedLead/verifyRejectLead");
+const {
+  verifyRejectLead,
+} = require("../controllers/rejectedLead/verifyRejectLead");
+const {
+  uploadCustomerFromCsv,
+} = require("../controllers/customer/uploadCustomerFromCsv");
 // const authorizedRole = require("../middleware/authorizedrole");
 
 const router = express.Router();
@@ -297,5 +302,15 @@ router
 router
   .route("/rejectLead/:id")
   .patch(protect, authorizedRole("Super Admin", "Admin"), verifyRejectLead);
+
+// upload customer
+router
+  .route("/uploadCustomer")
+  .post(
+    protect,
+    authorizedRole("Super Admin", "Admin"),
+    fileUploader([{ name: "csvFile", maxCount: 1 }], "csvFile"),
+    uploadCustomerFromCsv
+  );
 
 module.exports = router;

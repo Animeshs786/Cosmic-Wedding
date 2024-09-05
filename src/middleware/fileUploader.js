@@ -16,7 +16,9 @@ const allowedMimeTypes = [
   "video/ogg",
   "application/pdf",
   "application/msword",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "text/csv", 
+  "application/vnd.ms-excel",
 ];
 
 const fileUploader = (field, folder) => {

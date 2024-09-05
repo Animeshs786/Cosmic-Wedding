@@ -11,5 +11,7 @@ const locationSchema = new mongoose.Schema({
   },
 });
 
-const Location = mongoose.model("Location", locationSchema);
+// Use the existing model if it is already defined, otherwise define it
+const Location = mongoose.models.Location || mongoose.model("Location", locationSchema);
+
 module.exports = Location;

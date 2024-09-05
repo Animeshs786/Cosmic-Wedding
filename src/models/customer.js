@@ -32,6 +32,7 @@ const customerSchema = new mongoose.Schema({
   },
   guest: {
     type: Number,
+    default:0,
   },
   services: [
     {
