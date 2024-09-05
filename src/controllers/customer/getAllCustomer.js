@@ -106,6 +106,7 @@ exports.getAllCustomers = catchAsync(async (req, res) => {
   const customers = await Customer.find(obj)
     .populate("budgetRange")
     .populate("services")
+    .sort("-createdAt")
     .skip(skip)
     .limit(limit);
 

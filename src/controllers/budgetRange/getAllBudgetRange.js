@@ -15,7 +15,7 @@ exports.getAllBudgetRanges = catchAsync(async (req, res) => {
     currentLimit,
     BudgetRange
   );
-  const budgetRanges = await BudgetRange.find(obj).skip(skip).limit(limit);
+  const budgetRanges = await BudgetRange.find(obj).sort("-createdAt").skip(skip).limit(limit);
   res.status(200).json({
     status: true,
     message: "Budget ranges retrieved successfully",

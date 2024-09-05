@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      select: false,
+      // select: false,
       // required: [true, "Password must be required."],
     },
     verify: {
@@ -78,13 +78,14 @@ const userSchema = new mongoose.Schema(
 // hash user password
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
-  this.password = await bcrypt.hash(this.password, 10);
+  // this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
 // instance method for comparing the password
-userSchema.methods.comparePassword = async function (currentPassword) {
-  return await bcrypt.compare(currentPassword, this.password);
+userSchema.methods.comparePassword = function (currentPassword) {
+  // return await bcrypt.compare(currentPassword, this.password);
+  return currentPassword === this.password;
 };
 
 // validate jwt token create time

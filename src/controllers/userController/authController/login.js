@@ -10,7 +10,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
   const user = await User.findOne({ email }).select("+password");
 
-  if (!user || !(await user.comparePassword(password)))
+  if (!user || !(user.comparePassword(password)))
     return next(new AppError("Invalid email or password.", 404));
 
   // Check if the user is a vendor and their status is "Unverified"
