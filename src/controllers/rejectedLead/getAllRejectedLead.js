@@ -25,7 +25,14 @@ exports.getAllRejectedLead = catchAsync(async (req, res) => {
   } = await pagination(page, currentLimit, RejectedLead, null, obj);
 
   const lead = await RejectedLead.find(obj)
-    .populate("lead", "name mobile location weedingLocation")
+    .populate({
+      path: "lead",
+      select: "name mobile location weedingLocation",
+      // populate: [
+      //   { path: "location", select: "location" },
+      //   { path: "weedingLocation", select: "location" },
+      // ],
+    })
     .populate("rejectedBy", "userName mobile")
     .sort({ createdAt: -1 })
     .skip(skip)

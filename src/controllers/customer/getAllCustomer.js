@@ -77,15 +77,22 @@ exports.getAllCustomers = catchAsync(async (req, res) => {
     startDate,
     endDate,
     budgetRange,
+    location,
+    weedingLocation,
   } = req.query;
 
   const obj = {};
 
   if (search) {
-    obj.$or = [
-      { name: { $regex: search, $options: "i" } },
-      { location: { $regex: search, $options: "i" } },
-    ];
+    obj.$or = [{ name: { $regex: search, $options: "i" } }];
+  }
+
+  if (location) {
+    obj.location = location;
+  }
+  
+  if (weedingLocation) {
+    obj.weedingLocation = weedingLocation;
   }
 
   if (startDate && endDate) {
@@ -106,6 +113,8 @@ exports.getAllCustomers = catchAsync(async (req, res) => {
   const customers = await Customer.find(obj)
     .populate("budgetRange")
     .populate("services")
+    .populate("location", "location")
+    .populate("weedingLocation", "location")
     .sort("-createdAt")
     .skip(skip)
     .limit(limit);

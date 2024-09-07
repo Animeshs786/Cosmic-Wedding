@@ -10,16 +10,18 @@ const customerSchema = new mongoose.Schema({
     required: true,
   },
   location: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Location",
     required: true,
   },
   weedingLocation: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Location",
     required: true,
   },
   eventDate: {
     type: Date,
-    required: true,
+    // required: true,
   },
   email: {
     type: String,
@@ -32,7 +34,7 @@ const customerSchema = new mongoose.Schema({
   },
   guest: {
     type: Number,
-    default:0,
+    default: 0,
   },
   services: [
     {
@@ -43,7 +45,7 @@ const customerSchema = new mongoose.Schema({
   ],
   status: {
     type: String,
-    enum: ["Pending", "Contact","Accept", "Reject"],
+    enum: ["Pending", "Contact", "Accept", "Reject"],
     default: "Pending",
   },
   createdAt: {

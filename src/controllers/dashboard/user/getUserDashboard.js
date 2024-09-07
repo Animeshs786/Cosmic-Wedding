@@ -1,6 +1,7 @@
 const User = require("../../../models/user");
 const Customer = require("../../../models/customer");
 const catchAsync = require("../../../utils/catchAsync");
+const RejectedLead = require("../../../models/rejectedLead");
 
 exports.getUserDashboard = catchAsync(async (req, res) => {
   const startOfToday = new Date();
@@ -14,6 +15,12 @@ exports.getUserDashboard = catchAsync(async (req, res) => {
     createdAt: { $gte: startOfToday },
   });
 
+  const totalRejectedLeads = await RejectedLead.countDocuments();
+
+  const todayRejectedLeads = await RejectedLead.countDocuments({
+    createdAt: { $gte: startOfToday },
+  });
+
   res.status(200).json({
     status: true,
     message: "Admin dashboard data retrieved successfully",
@@ -21,6 +28,8 @@ exports.getUserDashboard = catchAsync(async (req, res) => {
       totalVendors,
       totalCustomers,
       todayCustomers,
+      totalRejectedLeads,
+      todayRejectedLeads,
     },
   });
 });
