@@ -5,7 +5,7 @@ const catchAsync = require("../../../utils/catchAsync");
 exports.getCustomersAssignedToVendor = catchAsync(async (req, res) => {
   const vendorId = req.user._id;
   const {
-    name,
+    search,
     serviceId,
     startDate,
     endDate,
@@ -78,11 +78,11 @@ exports.getCustomersAssignedToVendor = catchAsync(async (req, res) => {
   ];
 
   // Search Filters
-  if (name || serviceId || startDate || endDate || status || location) {
+  if (search || serviceId || startDate || endDate || status || location) {
     const customerMatch = {};
 
-    if (name) {
-      customerMatch["customer.name"] = { $regex: name, $options: "i" };
+    if (search) {
+      customerMatch["customer.name"] = { $regex: search, $options: "i" };
     }
     if (serviceId) {
       customerMatch["customer.services"] = new mongoose.Types.ObjectId(

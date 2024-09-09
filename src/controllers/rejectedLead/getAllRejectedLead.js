@@ -28,10 +28,10 @@ exports.getAllRejectedLead = catchAsync(async (req, res) => {
     .populate({
       path: "lead",
       select: "name mobile location weedingLocation",
-      // populate: [
-      //   { path: "location", select: "location" },
-      //   { path: "weedingLocation", select: "location" },
-      // ],
+      populate: [
+        { path: "location", select: "location" },
+        { path: "weedingLocation", select: "location" },
+      ],
     })
     .populate("rejectedBy", "userName mobile")
     .sort({ createdAt: -1 })

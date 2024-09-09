@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: [true, "Email must be required."],
-      unique: [true, "Email already exist."],
+      // unique: [true, "Email already exist."],
       validate: [validator.isEmail, "Email should not be valid."],
     },
     password: {
@@ -54,7 +54,7 @@ const userSchema = new mongoose.Schema(
     ],
     mobile: {
       type: String,
-      unique: true,
+      // unique: true,
     },
     profileImage: String,
     passwordUpdatedAt: Date,

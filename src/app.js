@@ -18,8 +18,7 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
 
-// Schedule the cron job to run the testVendro function every minute
-cron.schedule("*/5 * * * *", async () => {
+cron.schedule("0 0 * * *", async () => {
   try {
     await assignVendor();
     console.log("assign function executed");

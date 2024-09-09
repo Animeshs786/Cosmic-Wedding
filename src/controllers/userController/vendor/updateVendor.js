@@ -15,17 +15,26 @@ exports.updateVendor = catchAsync(async (req, res, next) => {
     verify,
     packageId,
   } = req.body;
-  const vendor = await User.findById(req.params.id);
 
+  // Find vendor by ID
+  const vendor = await User.findById(req.params.id);
   if (!vendor) {
     return next(new AppError("No vendor found with that ID", 404));
   }
 
-  // Check if email is being updated and ensure it doesn't already exist
+  // Check if the email is being updated and already exists for another user
   if (email && email !== vendor.email) {
-    const emailExists = await User.findOne({ email });
+    const emailExists = await User.findOne({ email, _id: { $ne: vendor._id } });
     if (emailExists) {
       return next(new AppError("Email already exists", 400));
+    }
+  }
+
+  // Check if the mobile is being updated and already exists for another user
+  if (mobile && mobile !== vendor.mobile) {
+    const mobileExists = await User.findOne({ mobile, _id: { $ne: vendor._id } });
+    if (mobileExists) {
+      return next(new AppError("Mobile number already exists", 400));
     }
   }
 
@@ -52,7 +61,6 @@ exports.updateVendor = catchAsync(async (req, res, next) => {
     vendor.password = password;
     vendor.confirmPassword = password;
   }
-  
 
   // Assign package to vendor if packageId is provided
   if (packageId) {
@@ -63,7 +71,6 @@ exports.updateVendor = catchAsync(async (req, res, next) => {
 
     vendor.package = selectedPackage._id;
     vendor.packageExpiry = new Date(
-      // Date.now() + selectedPackage.validity * 30 * 24 * 60 * 60 * 1000
       Date.now() + selectedPackage.validity * 24 * 60 * 60 * 1000
     );
     vendor.assignCustomerNumber = 0; // Reset assigned customer number

@@ -25,9 +25,6 @@ const {
   deleteAdmin,
 } = require("../controllers/userController/admin/deleteAdmin");
 const {
-  createVenodr,
-} = require("../controllers/userController/vendor/createVendor");
-const {
   getAllVendors,
 } = require("../controllers/userController/vendor/getAllVenodr");
 const { getVendor } = require("../controllers/userController/vendor/getVendor");
@@ -104,6 +101,7 @@ const {
 const {
   uploadCustomerFromCsv,
 } = require("../controllers/customer/uploadCustomerFromCsv");
+const { createVendor } = require("../controllers/userController/vendor/createVendor");
 // const authorizedRole = require("../middleware/authorizedrole");
 
 const router = express.Router();
@@ -157,7 +155,7 @@ router
     // protect,
     // authorizedRole("Super Admin", "Admin"),
     fileUploader([{ name: "profileImage", maxCount: 1 }], "user"),
-    createVenodr
+    createVendor
   )
   .get(protect, authorizedRole("Super Admin", "Admin"), getAllVendors);
 

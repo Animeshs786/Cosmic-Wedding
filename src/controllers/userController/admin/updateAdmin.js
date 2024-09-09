@@ -20,15 +20,15 @@ exports.updateAdmin = catchAsync(async (req, res, next) => {
 
   let profileImage = admin.profileImage;
 
-  if (req.files && req.files.profileImage) {
-    profileImage = `${req.files.profileImage[0].destination}/${req.files.profileImage[0].filename}`;
+  // if (req.files && req.files.profileImage) {
+  //   profileImage = `${req.files.profileImage[0].destination}/${req.files.profileImage[0].filename}`;
 
-    if (admin.profileImage) {
-      await deleteOldFiles([admin.profileImage]).catch((err) => {
-        console.error("Failed to delete old profile image", err);
-      });
-    }
-  }
+  //   if (admin.profileImage) {
+  //     await deleteOldFiles([admin.profileImage]).catch((err) => {
+  //       console.error("Failed to delete old profile image", err);
+  //     });
+  //   }
+  // }
 
   if (userName) admin.userName = userName;
   if (email) admin.email = email;
