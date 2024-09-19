@@ -18,14 +18,17 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
 
-cron.schedule("0 0 * * *", async () => {
+cron.schedule("30 5 * * *", async () => {
   try {
     await assignVendor();
     console.log("assign function executed");
   } catch (error) {
     console.error("Error executing assign function:", error);
   }
+}, {
+  timezone: "Asia/Kolkata" // Setting time zone to IST
 });
+
 
 //cookie parser middleware
 app.use(cookieParser());

@@ -6,6 +6,7 @@ async function testVendro(req, res) {
   try {
     const unassignedCustomers = await Customer.find({
       _id: { $nin: await Assign.distinct("customer") },
+      verify: true,
     }).populate("budgetRange"); // Populate customer's budget range
 
     const assignments = [];

@@ -16,11 +16,13 @@ exports.updateCustomer = catchAsync(async (req, res, next) => {
     status,
     weedingLocation,
     reason,
+    verify
   } = req.body;
 
   const updateObj = {};
 
   if (name) updateObj.name = name;
+  if (verify) updateObj.verify = verify;
   if (mobile) updateObj.mobile = mobile;
   if (location) updateObj.location = location;
   if (eventDate) updateObj.eventDate = eventDate;

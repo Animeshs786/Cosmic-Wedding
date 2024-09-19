@@ -14,6 +14,10 @@ const customerSchema = new mongoose.Schema({
     ref: "Location",
     required: true,
   },
+  verify:{
+    type:Boolean,
+    default:false
+  },
   weedingLocation: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Location",

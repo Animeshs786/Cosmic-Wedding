@@ -8,7 +8,7 @@ const packageScheam = new mongoose.Schema({
   },
   validity: {
     type: Number,
-    enum: [1, 10, 15, 30, 90, 180, 360],
+    enum: [1, 10, 15, 40, 100, 190, 375,60],
     required: true,
   },
   budgetRange: {

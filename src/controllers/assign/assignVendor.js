@@ -62,13 +62,14 @@ async function assignVendor() {
     // Find unassigned customers and populate their budget range
     const unassignedCustomers = await Customer.find({
       _id: { $nin: await Assign.distinct("customer") },
+      verify: true,
     }).populate("budgetRange");
 
     const assignments = [];
 
     for (const customer of unassignedCustomers) {
       const vendors = await User.find({
-        location: { $in: [customer.weedingLocation] }, 
+        location: { $in: [customer.weedingLocation] },
         role: "Vendor",
         verify: "Verified",
         // packageExpiry: { $gt: new Date() }, // Uncomment if you want to check for package expiry
