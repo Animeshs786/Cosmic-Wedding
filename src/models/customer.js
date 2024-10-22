@@ -14,9 +14,9 @@ const customerSchema = new mongoose.Schema({
     ref: "Location",
     required: true,
   },
-  verify:{
-    type:Boolean,
-    default:false
+  verify: {
+    type: Boolean,
+    default: false,
   },
   weedingLocation: {
     type: mongoose.Schema.Types.ObjectId,
@@ -47,6 +47,14 @@ const customerSchema = new mongoose.Schema({
       required: true,
     },
   ],
+  numberOfAssign: {
+    type: Number,
+    default: 0,
+  },
+  lastAssign: {
+    type: Date,
+    default: null,
+  },
   status: {
     type: String,
     enum: ["Pending", "Contact", "Accept", "Reject"],

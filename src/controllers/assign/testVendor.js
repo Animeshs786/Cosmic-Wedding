@@ -70,7 +70,6 @@ const User = require("../../models/user");
 
 // module.exports = testVendro;
 
-
 async function testVendro(req, res) {
   try {
     const unassignedCustomers = await Customer.find({
@@ -97,7 +96,10 @@ async function testVendro(req, res) {
         if (
           vendor.package && // Ensure the package exists
           vendor.assignCustomerNumber < vendor.package.assignLeadValue && // Check vendor's lead capacity
-          vendor.package.budgetRange.equals(customer.budgetRange._id) // Check budget range match
+          vendor.package.budgetRange && // Ensure the vendor's budget range exists
+          vendor.package.budgetRange.some((range) =>
+            range.equals(customer.budgetRange._id)
+          ) // Check if any budget range matches
         ) {
           assignments.push({
             customer: customer._id,
@@ -107,6 +109,10 @@ async function testVendro(req, res) {
           vendor.lastAssignedAt = new Date(); // Update last assigned time
           vendor.assignCustomerNumber += 1; // Increment assigned customer number
           await vendor.save(); // Save vendor data
+
+          customer.numberOfAssign += 1;
+          customer.lastAssign = new Date();
+          await customer.save();
 
           console.log(
             `Assigned customer ${customer.name} to vendor ${vendor.userName}`

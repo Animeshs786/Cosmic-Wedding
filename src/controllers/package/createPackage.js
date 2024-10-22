@@ -2,11 +2,11 @@ const Package = require("../../models/package");
 const catchAsync = require("../../utils/catchAsync");
 
 exports.createPackage = catchAsync(async (req, res) => {
-  const { name, validity, buddgetRange, assignLeadValue } = req.body;
+  const { name, validity, budgetRange, assignLeadValue } = req.body;
   const packageData = await Package.create({
     name,
     validity,
-    buddgetRange,
+    budgetRange,
     assignLeadValue,
   });
   res.status(201).json({

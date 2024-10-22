@@ -8,13 +8,15 @@ const packageScheam = new mongoose.Schema({
   },
   validity: {
     type: Number,
-    enum: [1, 10, 15, 40, 100, 190, 375,60],
+    enum: [1, 10, 15, 40, 100, 190, 375, 60],
     required: true,
   },
-  budgetRange: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "BudgetRange",
-  },
+  budgetRange: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "BudgetRange",
+    },
+  ],
   assignLeadValue: {
     type: Number,
     required: true, //it define lead value for package

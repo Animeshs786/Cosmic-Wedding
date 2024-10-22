@@ -1,5 +1,7 @@
+const Assign = require("../../models/assign");
 const Customer = require("../../models/customer");
 const RejectedLead = require("../../models/rejectedLead");
+const User = require("../../models/user");
 const AppError = require("../../utils/AppError");
 const catchAsync = require("../../utils/catchAsync");
 
@@ -16,13 +18,16 @@ exports.updateCustomer = catchAsync(async (req, res, next) => {
     status,
     weedingLocation,
     reason,
-    verify
+    verify,
+    assignVendor,
   } = req.body;
 
   const updateObj = {};
 
   if (name) updateObj.name = name;
-  if (verify) updateObj.verify = verify;
+  if (verify === true || verify === false) {
+    updateObj.verify = verify;
+  }
   if (mobile) updateObj.mobile = mobile;
   if (location) updateObj.location = location;
   if (eventDate) updateObj.eventDate = eventDate;
@@ -42,6 +47,29 @@ exports.updateCustomer = catchAsync(async (req, res, next) => {
       updateObj.status = status;
     } else {
       updateObj.status = status;
+    }
+
+    if (status === "Pending") {
+      if (!assignVendor)
+        return next(new AppError("Please select a vendor", 400));
+
+      const assingData = await Assign.findOne({
+        customer: req.params.id,
+        vendor: assignVendor,
+      });
+
+      if (assingData) {
+        const vendorData = await User.findById(assingData.vendor);
+        vendorData.assignCustomerNumber -= 1;
+        await vendorData.save();
+        await Assign.findByIdAndDelete(assingData._id);
+
+        //Decrease the assign lead number of the customer
+        const customer = await Customer.findById(assingData.customer);
+        customer.numberOfAssign -= 1;
+        customer.lastAssign = new Date();
+        await customer.save();
+      }
     }
   }
 

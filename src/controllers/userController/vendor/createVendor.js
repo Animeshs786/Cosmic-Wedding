@@ -40,7 +40,7 @@ exports.createVendor = catchAsync(async (req, res, next) => {
     }
 
     const newUser = await User.create(obj);
-    newUser.password = undefined; // Exclude password from response
+    newUser.password = undefined; 
     createToken(newUser, 201, res); // Send response with token
   } catch (error) {
     // If there was an error and profileImage was uploaded, delete the file

@@ -62,7 +62,7 @@ const userSchema = new mongoose.Schema(
     passwordTokenExpiry: Date,
     createdAt: {
       type: Date,
-      default: Date.now(),
+      default: Date.now,
     },
     lastAssignedAt: {
       type: Date,

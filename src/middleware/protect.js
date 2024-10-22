@@ -30,6 +30,10 @@ exports.protect = catchAsync(async (req, res, next) => {
     return next(new AppError("User not existed.", 404));
   }
 
+  if (user.role === "Vendor" && user.verify === "Unverified") {
+    return next(new AppError("Yor Package has been expired.", 401));
+  }
+
   //Step4. check password update
   if (await user.validatePasswordUpdate(decoded.iat)) {
     return next(new AppError("Password updated login again.", 404));

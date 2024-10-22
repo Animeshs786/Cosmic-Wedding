@@ -1,18 +1,23 @@
 const Assign = require("../../models/assign");
 const Customer = require("../../models/customer");
+const Setting = require("../../models/setting");
 const User = require("../../models/user");
 
-async function assignVendor() {
+async function leadShuffleing() {
   try {
-    // Find unassigned customers and populate their budget range
-    const unassignedCustomers = await Customer.find({
-      _id: { $nin: await Assign.distinct("customer") },
+    const today = new Date();
+    const setting = await Setting.findById("671209786e71f92bd39c21d6");
+
+    const assignedCustomers = await Customer.find({
       verify: true,
+      numberOfAssign: { $lt: setting.numberOfAssign || 4, $gt: 0 },
+      $or: [{ eventDate: { $gt: today } }, { eventDate: null }],
+      guest: 23,
     }).populate("budgetRange");
 
     const assignments = [];
 
-    for (const customer of unassignedCustomers) {
+    for (const customer of assignedCustomers) {
       const vendors = await User.find({
         location: { $in: [customer.weedingLocation] },
         role: "Vendor",
@@ -24,26 +29,37 @@ async function assignVendor() {
         })
         .sort("lastAssignedAt");
 
+      let assignedCount = customer.numberOfAssign;
+
       for (const vendor of vendors) {
-        // Check if vendor's package exists and matches the criteria
+        const alreadyAssigned = await Assign.findOne({
+          customer: customer._id,
+          vendor: vendor._id,
+        });
+
+        customer.lastAssign.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+
         if (
-          vendor.package && // Ensure the package exists
-          vendor.assignCustomerNumber < vendor.package.assignLeadValue && // Check vendor's lead capacity
-          vendor.package.budgetRange && // Ensure the vendor's budget range exists
+          !alreadyAssigned &&
+          vendor.assignCustomerNumber < vendor.package.assignLeadValue &&
+          vendor.package &&
           vendor.package.budgetRange.some((range) =>
             range.equals(customer.budgetRange._id)
-          ) // Check if any budget range matches
+          ) &&
+          (!customer.lastAssign ||
+            today - customer.lastAssign >=
+              setting.duration * 24 * 60 * 60 * 1000) &&
+          (!customer.eventDate || customer.eventDate > today)
         ) {
-          // Assign the customer to the vendor
           assignments.push({
             customer: customer._id,
             vendor: vendor._id,
           });
 
-          // Update vendor's last assigned time and increment their assigned customer number
           vendor.lastAssignedAt = new Date();
           vendor.assignCustomerNumber += 1;
-          await vendor.save(); // Save vendor data
+          await vendor.save();
 
           customer.numberOfAssign += 1;
           customer.lastAssign = new Date();
@@ -53,18 +69,21 @@ async function assignVendor() {
             `Assigned customer ${customer.name} to vendor ${vendor.userName}`
           );
 
-          break; // Break loop once a vendor is assigned
+          assignedCount++;
+
+          if (assignedCount >= 4) {
+            break;
+          }
         }
       }
     }
 
     if (assignments.length > 0) {
-      // Insert all assignments in bulk
       await Assign.insertMany(assignments);
       console.log(`Assigned ${assignments.length} customers to vendors.`);
     } else {
       console.log(
-        "No unassigned customers found or all vendors have reached their lead limit."
+        "No eligible customers found or all vendors have reached their lead limit."
       );
     }
   } catch (error) {
@@ -72,4 +91,4 @@ async function assignVendor() {
   }
 }
 
-module.exports = assignVendor;
+module.exports = leadShuffleing;

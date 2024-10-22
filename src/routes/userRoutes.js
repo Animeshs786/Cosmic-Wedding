@@ -101,7 +101,19 @@ const {
 const {
   uploadCustomerFromCsv,
 } = require("../controllers/customer/uploadCustomerFromCsv");
-const { createVendor } = require("../controllers/userController/vendor/createVendor");
+const {
+  createVendor,
+} = require("../controllers/userController/vendor/createVendor");
+const verificationSchedule = require("../controllers/assign/verificationSchedule");
+const {
+  uploadVendorFromCsv,
+} = require("../controllers/userController/vendor/uploadVendorFromCsv");
+const {
+  getVendorFromCustomer,
+} = require("../controllers/userController/vendor/getVendorFromCustomer");
+const testLeadShuffleing = require("../controllers/assign/testLeadShuffleing");
+const { setting } = require("../controllers/setting/setting");
+const { getSetting } = require("../controllers/setting/getSetting");
 // const authorizedRole = require("../middleware/authorizedrole");
 
 const router = express.Router();
@@ -158,6 +170,21 @@ router
     createVendor
   )
   .get(protect, authorizedRole("Super Admin", "Admin"), getAllVendors);
+
+router.post(
+  "/uploadVendor",
+  //  protect,
+  // authorizedRole("Super Admin", "Admin"),
+  fileUploader([{ name: "csvFile", maxCount: 1 }], "csvFile"),
+  uploadVendorFromCsv
+);
+
+router.post(
+  "/vendorFromCustomer",
+  protect,
+  authorizedRole("Super Admin", "Admin"),
+  getVendorFromCustomer
+);
 
 router
   .route("/vendor/:id")
@@ -311,4 +338,10 @@ router
     uploadCustomerFromCsv
   );
 
+router.get("/testSchedular", verificationSchedule);
+router.get("/testLeadShuffleing", testLeadShuffleing);
+
+//Setting
+router.post("/setting", setting);
+router.get("/setting", getSetting);
 module.exports = router;
