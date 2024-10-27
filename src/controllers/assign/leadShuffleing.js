@@ -12,7 +12,7 @@ async function leadShuffleing() {
       verify: true,
       numberOfAssign: { $lt: setting.numberOfAssign || 4, $gt: 0 },
       $or: [{ eventDate: { $gt: today } }, { eventDate: null }],
-      guest: 23,
+      // guest: 23,
     }).populate("budgetRange");
 
     const assignments = [];
