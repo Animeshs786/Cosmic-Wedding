@@ -6,13 +6,21 @@ const User = require("../../models/user");
 async function leadShuffleing() {
   try {
     const today = new Date();
+    // today.setHours(0, 0, 0, 0);
+
     const setting = await Setting.findById("671209786e71f92bd39c21d6");
+
+    const validDate = setting.validDate || 6;
+
+    const sixDaysAgo = new Date(today);
+    sixDaysAgo.setDate(today.getDate() - validDate);
 
     const assignedCustomers = await Customer.find({
       verify: true,
       numberOfAssign: { $lt: setting.numberOfAssign || 4, $gt: 0 },
       $or: [{ eventDate: { $gt: today } }, { eventDate: null }],
       // guest: 23,
+      createdAt: { $gte: sixDaysAgo },
     }).populate("budgetRange");
 
     const assignments = [];

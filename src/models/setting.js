@@ -9,6 +9,10 @@ const settingSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  validDate: {
+    type: Number,
+    default: 6,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

@@ -2,12 +2,19 @@ const Setting = require("../../models/setting");
 const catchAsync = require("../../utils/catchAsync");
 
 exports.setting = catchAsync(async (req, res) => {
-  const { duration, numberOfAssign, id="671209786e71f92bd39c21d6" } = req.body;
+  const {
+    duration,
+    numberOfAssign,
+    validDate,
+    id = "671209786e71f92bd39c21d6",
+  } = req.body;
 
   const updateData = {};
 
   if (duration) updateData.duration = duration;
   if (numberOfAssign) updateData.numberOfAssign = numberOfAssign;
+  if (validDate) updateData.validDate = validDate;
+
 
   let home;
   if (!id) {
