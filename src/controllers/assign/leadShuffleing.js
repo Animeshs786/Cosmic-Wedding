@@ -15,6 +15,8 @@ async function leadShuffleing() {
     const sixDaysAgo = new Date(today);
     sixDaysAgo.setDate(today.getDate() - validDate);
 
+    if (setting.numberOfAssign === 0) return;
+
     const assignedCustomers = await Customer.find({
       verify: true,
       numberOfAssign: { $lt: setting.numberOfAssign || 4, $gt: 0 },
