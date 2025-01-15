@@ -32,7 +32,10 @@ exports.updateVendor = catchAsync(async (req, res, next) => {
 
   // Check if the mobile is being updated and already exists for another user
   if (mobile && mobile !== vendor.mobile) {
-    const mobileExists = await User.findOne({ mobile, _id: { $ne: vendor._id } });
+    const mobileExists = await User.findOne({
+      mobile,
+      _id: { $ne: vendor._id },
+    });
     if (mobileExists) {
       return next(new AppError("Mobile number already exists", 400));
     }
@@ -74,6 +77,7 @@ exports.updateVendor = catchAsync(async (req, res, next) => {
       Date.now() + selectedPackage.validity * 24 * 60 * 60 * 1000
     );
     vendor.assignCustomerNumber = 0; // Reset assigned customer number
+    vendor.packageAssign = new Date();
   }
 
   // Save the updated vendor

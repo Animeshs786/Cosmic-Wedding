@@ -51,18 +51,21 @@ exports.getVendorDashboard = catchAsync(async (req, res) => {
   const startOfToday = new Date();
   startOfToday.setHours(0, 0, 0, 0);
 
+  const vendorStats = await User.findById(vendorId)
+    .populate("package", "assignLeadValue")
+    .select("package assignCustomerNumber");
+
+  const packageAssign = vendorStats?.packageAssign?.setHours(0, 0, 0, 0);
+
   const totalAssignedCustomers = await Assign.countDocuments({
     vendor: vendorId,
+    createdAt: packageAssign ? { $gte: packageAssign } : { $ne: null },
   });
 
   const todayAssignedCustomers = await Assign.countDocuments({
     vendor: vendorId,
     createdAt: { $gte: startOfToday },
   });
-
-  const vendorStats = await User.findById(vendorId)
-    .populate("package", "assignLeadValue")
-    .select("package assignCustomerNumber");
 
   const leadUnderProcess = await RejectedLead.countDocuments({
     rejectedBy: vendorId,
@@ -71,6 +74,7 @@ exports.getVendorDashboard = catchAsync(async (req, res) => {
 
   const totalRejectedLeads = await RejectedLead.countDocuments({
     rejectedBy: vendorId,
+    createdAt: packageAssign ? { $gte: packageAssign } : { $ne: null },
   });
 
   const todayRejectedLeads = await RejectedLead.countDocuments({

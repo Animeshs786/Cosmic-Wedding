@@ -10,6 +10,9 @@ const rejectedLeadSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  remark: {
+    type: String,
+  },
   rejectedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

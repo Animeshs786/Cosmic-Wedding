@@ -34,6 +34,7 @@ const userSchema = new mongoose.Schema(
       ref: "Package",
     },
     packageExpiry: Date,
+    packageAssign: Date,
     assignCustomerNumber: {
       type: Number,
       default: 0,

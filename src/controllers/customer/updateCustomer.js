@@ -1,5 +1,6 @@
 const Assign = require("../../models/assign");
 const Customer = require("../../models/customer");
+const LeadStatus = require("../../models/leadStatus");
 const RejectedLead = require("../../models/rejectedLead");
 const User = require("../../models/user");
 const AppError = require("../../utils/AppError");
@@ -23,6 +24,7 @@ exports.updateCustomer = catchAsync(async (req, res, next) => {
   } = req.body;
 
   const updateObj = {};
+  const userId = req.user._id;
 
   if (name) updateObj.name = name;
   if (verify === true || verify === false) {
@@ -38,6 +40,16 @@ exports.updateCustomer = catchAsync(async (req, res, next) => {
   if (weedingLocation) updateObj.weedingLocation = weedingLocation;
 
   if (status) {
+    const leadStatus = await LeadStatus.findOne({
+      vendor: userId,
+      customer: req.params.id,
+    });
+
+    if (leadStatus) {
+      leadStatus.status = status;
+      await leadStatus.save();
+    }
+
     if (status === "Reject") {
       await RejectedLead.create({
         lead: req.params.id,

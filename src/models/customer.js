@@ -44,7 +44,6 @@ const customerSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Service",
-      required: true,
     },
   ],
   numberOfAssign: {

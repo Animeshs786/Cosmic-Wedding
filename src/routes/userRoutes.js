@@ -114,6 +114,8 @@ const {
 const testLeadShuffleing = require("../controllers/assign/testLeadShuffleing");
 const { setting } = require("../controllers/setting/setting");
 const { getSetting } = require("../controllers/setting/getSetting");
+const { rejectHistory } = require("../controllers/rejectedLead/rejectHistory");
+const { getAllAssign } = require("../controllers/assign/getAllAssign");
 // const authorizedRole = require("../middleware/authorizedrole");
 
 const router = express.Router();
@@ -344,4 +346,17 @@ router.get("/testLeadShuffleing", testLeadShuffleing);
 //Setting
 router.post("/setting", setting);
 router.get("/setting", getSetting);
+
+//History
+router
+  .route("/rejectedHistory")
+  .get(
+    protect,
+    authorizedRole("Super Admin", "Admin", "Vendor"),
+    rejectHistory
+  );
+router
+  .route("/assignHistory")
+  .get(protect, authorizedRole("Super Admin", "Admin", "Vendor"), getAllAssign);
+
 module.exports = router;

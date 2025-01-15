@@ -85,6 +85,7 @@ exports.getAllVendors = catchAsync(async (req, res) => {
 
   const vendors = await User.find(obj)
     .populate("location", "location")
+    .populate("package","assignLeadValue")
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit);

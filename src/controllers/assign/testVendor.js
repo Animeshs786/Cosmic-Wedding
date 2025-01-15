@@ -70,20 +70,26 @@ const User = require("../../models/user");
 
 // module.exports = testVendro;
 
+const LeadStatus = require("../../models/leadStatus");
+const mongoose = require("mongoose");
+
 async function testVendro(req, res) {
   try {
     const unassignedCustomers = await Customer.find({
       _id: { $nin: await Assign.distinct("customer") },
       verify: true,
-    }).populate("budgetRange"); // Populate customer's budget range
+      services: { $exists: true, $ne: [] },
+    }).populate("budgetRange services");
 
     const assignments = [];
+    const leadStatuses = []; // Array to store lead statuses
 
     for (const customer of unassignedCustomers) {
       const vendors = await User.find({
         location: { $in: [customer.weedingLocation] },
         role: "Vendor",
         verify: "Verified", // Verification condition
+        service: { $eq: customer.services[0] },
       })
         .populate({
           path: "package",
@@ -101,9 +107,22 @@ async function testVendro(req, res) {
             range.equals(customer.budgetRange._id)
           ) // Check if any budget range matches
         ) {
+          // Generate a manual _id for the assignment
+          const assignmentId = new mongoose.Types.ObjectId();
+
+          // Prepare an assignment
           assignments.push({
+            _id: assignmentId, // Use the manually generated _id
             customer: customer._id,
             vendor: vendor._id,
+          });
+
+          // Prepare the corresponding lead status
+          leadStatuses.push({
+            assign: assignmentId, // Use the same _id as the assignment
+            vendor: vendor._id,
+            customer: customer._id,
+            status: "Pending", // Default status
           });
 
           vendor.lastAssignedAt = new Date(); // Update last assigned time
@@ -124,9 +143,14 @@ async function testVendro(req, res) {
     }
 
     if (assignments.length > 0) {
-      await Assign.insertMany(assignments); // Insert assignments in bulk
+      // Insert assignments in bulk
+      await Assign.insertMany(assignments);
+
+      // Insert lead statuses in bulk
+      await LeadStatus.insertMany(leadStatuses);
+
       res.status(200).json({
-        message: `Assigned ${assignments.length} customers to vendors.`,
+        message: `Assigned ${assignments.length} customers to vendors and created ${leadStatuses.length} lead statuses.`,
       });
     } else {
       res.status(200).json({

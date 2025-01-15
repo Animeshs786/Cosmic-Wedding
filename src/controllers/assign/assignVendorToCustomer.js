@@ -1,5 +1,6 @@
 const Assign = require("../../models/assign");
 const Customer = require("../../models/customer");
+const LeadStatus = require("../../models/leadStatus");
 const User = require("../../models/user");
 const AppError = require("../../utils/AppError");
 const catchAsync = require("../../utils/catchAsync");
@@ -120,6 +121,14 @@ exports.assignVendorToCustomer = catchAsync(async (req, res, next) => {
       assignedAt: new Date(),
     });
     await assignment.save();
+
+    const leadStatus = new LeadStatus({
+      vendor: vendorId,
+      customer: customerId,
+      assign: assignment._id,
+      status: "Pending", // Default status
+    });
+    await leadStatus.save();
 
     // Update vendor assignment count
     vendor.assignCustomerNumber += 1;

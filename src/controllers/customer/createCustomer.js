@@ -2,8 +2,17 @@ const Customer = require("../../models/customer");
 const catchAsync = require("../../utils/catchAsync");
 
 exports.createCustomer = catchAsync(async (req, res) => {
-  const { name, mobile, location,weedingLocation, eventDate, email, budgetRange, guest, services } =
-    req.body;
+  const {
+    name,
+    mobile,
+    location,
+    weedingLocation,
+    eventDate,
+    email,
+    budgetRange,
+    guest,
+    services = ["66b70f0e79e583121137805d"],
+  } = req.body;
 
   const customer = await Customer.create({
     name,
@@ -14,7 +23,7 @@ exports.createCustomer = catchAsync(async (req, res) => {
     budgetRange,
     guest,
     services,
-    weedingLocation
+    weedingLocation,
   });
 
   res.status(201).json({
