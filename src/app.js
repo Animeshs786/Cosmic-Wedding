@@ -90,7 +90,7 @@ appRoutes(app);
 // unhandle route middleware
 app.all("*", (req, res, next) => {
   return next(
-    new AppError(`The route ${req.originalUrl} not run on this server.`, 404)
+    new AppError(`The route ${req.originalUrl} not run on this server?`, 404)
   );
 });
 
